@@ -6,17 +6,17 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
-package org.apache.kylin.common.util;
+package org.apache.kylin.common.notify;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,12 +24,14 @@ import java.util.List;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.kylin.common.KylinConfig;
+import org.apache.kylin.common.notify.util.MailNotificationUtil;
+import org.apache.kylin.common.notify.util.Notify;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author xduo
  */
-public class MailService {
+public class MailService extends NotifyServiceBase {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(MailService.class);
 
     private Boolean enabled = Boolean.TRUE;
@@ -40,8 +42,9 @@ public class MailService {
     private String password;
     private String sender;
 
+
     public MailService(KylinConfig config) {
-        this(config.isMailEnabled(), config.isStarttlsEnabled(), config.getMailHost(), config.getSmtpPort(), config.getMailUsername(), config.getMailPassword(), config.getMailSender());
+        this(config.isNotifyEnabled(), config.isStarttlsEnabled(), config.getMailHost(), config.getSmtpPort(), config.getMailUsername(), config.getMailPassword(), config.getMailSender());
     }
 
     private MailService(boolean enabled, boolean starttlsEnabled, String host, String port, String username, String password, String sender) {
@@ -95,7 +98,7 @@ public class MailService {
         } else {
             email.setSmtpPort(Integer.parseInt(port));
         }
-        
+
         if (username != null && !username.trim().isEmpty()) {
             email.setAuthentication(username, password);
         }
@@ -133,5 +136,18 @@ public class MailService {
             logger.error(e.getLocalizedMessage(), e);
             return false;
         }
+    }
+
+    public boolean sendNotify() {
+        if (receivers.get(Notify.NOTIFY_EMAIL_LIST) == null) {
+            logger.warn("no need to send email, content is null");
+            return false;
+        } else {
+            logger.info("prepare to send email to:{}", receivers.get(Notify.NOTIFY_EMAIL_LIST));
+            String contentEmail = MailNotificationUtil.getMailContent(state, content.getSecond());
+            String title = MailNotificationUtil.getMailTitle(content.getFirst());
+            return sendMail(receivers.get(Notify.NOTIFY_EMAIL_LIST), title, contentEmail);
+        }
+
     }
 }

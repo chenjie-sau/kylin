@@ -16,15 +16,13 @@
  * limitations under the License.
 */
 
-package org.apache.kylin.common.util;
+package org.apache.kylin.common.notify.util;
 
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -35,8 +33,6 @@ import freemarker.template.Template;
  * The template file is [KEY].ftl file under /mail_templates directory with classloader.
  */
 public class MailTemplateProvider {
-
-    private static final Logger logger = LoggerFactory.getLogger(MailTemplateProvider.class);
 
     private static MailTemplateProvider DEFAULT_INSTANCE = new MailTemplateProvider();
 

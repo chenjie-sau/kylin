@@ -44,12 +44,21 @@ KylinApp.controller('CubeCtrl', function ($scope, $rootScope, AccessService, Mes
         });
     };
 
-    $scope.getNotifyListString = function (cube) {
-        if (cube.detail.notify_list) {
-            cube.notifyListString = cube.detail.notify_list.join(",");
+    $scope.getNotifyEmailListString = function (cube) {
+        if (cube.detail.notify_email_list) {
+            cube.notifyEmailListString = cube.detail.notify_email_list.join(",");
         }
         else {
-            cube.notifyListString = "";
+            cube.notifyEmailListString = "";
+        }
+    };
+
+    $scope.getNotifyDingTalkListString = function (cube) {
+        if (cube.detail.notify_dingtalk_list) {
+            cube.notifyDingTalkListString = cube.detail.notify_dingtalk_list.join(",");
+        }
+        else {
+            cube.notifyDingTalkListString = "";
         }
     };
 
@@ -69,13 +78,32 @@ KylinApp.controller('CubeCtrl', function ($scope, $rootScope, AccessService, Mes
         return newCube;
     };
 
-    $scope.updateNotifyList = function (cube) {
-        if (cube.notifyListString.length === 0) {
-            cube.detail.notify_list = [];
+    $scope.updateNotifyEmailList = function (cube) {
+        if (cube.notifyEmailListString.length === 0) {
+            cube.detail.notify_email_list = [];
         } else {
-            cube.detail.notify_list = cube.notifyListString.split(",");
+            cube.detail.notify_email_list = cube.notifyEmailListString.split(",");
         }
-        CubeService.updateNotifyList({cubeId: cube.name}, cube.detail.notify_list, function () {
+        CubeService.updateNotifyEmailList({cubeId: cube.name}, cube.detail.notify_email_list, function () {
+            MessageBox.successNotify('Notify List updated successfully!');
+        },function(e){
+            if(e.data&& e.data.exception){
+                var message =e.data.exception;
+                var msg = !!(message) ? message : 'Failed to take action.';
+                SweetAlert.swal('Oops...', msg, 'error');
+            }else{
+                SweetAlert.swal('Oops...', "Failed to take action.", 'error');
+            }
+        });
+    };
+
+    $scope.updateNotifyDingTalkList = function (cube) {
+        if (cube.notifyDingTalkListString.length === 0) {
+            cube.detail.notify_dingtalk_list = [];
+        } else {
+            cube.detail.notify_dingtalk_list = cube.notifyDingTalkListString.split(",");
+        }
+        CubeService.updateNotifyDingTalkList({cubeId: cube.name}, cube.detail.notify_dingtalk_list, function () {
             MessageBox.successNotify('Notify List updated successfully!');
         },function(e){
             if(e.data&& e.data.exception){

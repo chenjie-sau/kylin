@@ -22,7 +22,7 @@ echo "package back-end"
 dir=$(dirname ${0})
 cd ${dir}/../..
 
-mvn clean install -DskipTests $@ || { exit 1; }
+mvn clean install -DskipTests -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true $@ || { exit 1; }
 
 #package webapp
 echo 'package front-end'

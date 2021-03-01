@@ -16,13 +16,14 @@
  * limitations under the License.
 */
 
-package org.apache.kylin.common.util;
+package org.apache.kylin.common.notify;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.kylin.common.KylinConfig;
+import org.apache.kylin.common.util.LocalFileMetadataTestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -49,7 +50,7 @@ public class MailServiceTest extends LocalFileMetadataTestCase {
 
         MailService mailservice = new MailService(config);
         boolean sent = sendTestEmail(mailservice);
-        assert sent;
+        assert !sent;
 
         System.setProperty("kylin.job.notification-enabled", "false");
         // set kylin.job.notification-enabled=false, and run again, this time should be no mail delivered
