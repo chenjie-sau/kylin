@@ -243,14 +243,18 @@ public class CubingJob extends DefaultChainedExecutable {
             String classSimpleName = errorTask.getClass().getSimpleName();
             if (classSimpleName.equals(ENGINE_MR)) {
                 final String jobId = errorOutput.getExtra().get(ExecutableConstants.MR_JOB_ID);
+                dataMap.put("job_type", "MR Job");
                 dataMap.put("job_id", StringUtil.noBlank(jobId, "Not initialized"));
             } else if (classSimpleName.equals(ENGINE_FLINK)){
                 final String jobId = errorOutput.getExtra().get(ExecutableConstants.FLINK_JOB_ID);
+                dataMap.put("job_type", "Flink Job");
                 dataMap.put("job_id", StringUtil.noBlank(jobId, "Not initialized"));
             } else if (classSimpleName.equals(ENGINE_SPARK)){
                 final String jobId = errorOutput.getExtra().get(ExecutableConstants.SPARK_JOB_ID);
+                dataMap.put("job_type", "Spark Job");
                 dataMap.put("job_id", StringUtil.noBlank(jobId, "Not initialized"));
             } else {
+                dataMap.put("job_type", Notify.NA);
                 dataMap.put("job_id", Notify.NA);
             }
             dataMap.put("error_log",
