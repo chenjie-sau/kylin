@@ -26,6 +26,17 @@ public class ClassUtilTest {
     @Test
     public void testFindContainingJar() throws ClassNotFoundException {
         Assert.assertTrue(ClassUtil.findContainingJar(Class.forName("org.apache.commons.beanutils.BeanUtils")).contains("commons-beanutils"));
+        System.out.println(ClassUtil.findContainingJar(Class.forName("org.apache.commons.beanutils.BeanUtils")));
+        Assert.assertTrue(ClassUtil.findContainingJar(new String[]{"commons-beanutils"}, Class.forName("org.apache.commons.beanutils.BeanUtils")).equalsIgnoreCase(""));
+
+        StringBuilder jars = new StringBuilder();
+        StringUtil.appendWithSeparator(jars, "");
+        StringUtil.appendWithSeparator(jars, "aa");
+        //StringUtil.appendWithSeparator(jars, "bb");
+        //StringUtil.appendWithSeparator(jars, "cc");
+        StringUtil.appendWithSeparator(jars, "");
+        StringUtil.appendWithSeparator(jars, "cc");
+        System.out.println(jars.toString());
 
         // fixme broken now
         //Assert.assertTrue(ClassUtil.findContainingJar(Class.forName("org.apache.commons.beanutils.BeanUtils"), "core").contains("commons-beanutils-core"));

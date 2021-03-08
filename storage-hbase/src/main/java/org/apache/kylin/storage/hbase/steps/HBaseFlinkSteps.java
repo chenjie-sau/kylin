@@ -53,39 +53,40 @@ public class HBaseFlinkSteps extends HBaseJobSteps {
         flinkExecutable.setParam(AbstractHadoopJob.OPTION_HBASE_CONF_PATH.getOpt(), getHBaseConfFilePath(jobId));
         flinkExecutable.setJobId(jobId);
 
+        String[] filterJar = seg.getConfig().getSparkConvertCuboidDataJarsFilter().split(",");
         StringBuilder jars = new StringBuilder();
-        StringUtil.appendWithSeparator(jars, ClassUtil.findContainingJar(org.apache.hadoop.hbase.KeyValue.class));
+        StringUtil.appendWithSeparator(jars, ClassUtil.findContainingJar(filterJar, org.apache.hadoop.hbase.KeyValue.class));
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar(org.apache.hadoop.hbase.mapreduce.HFileOutputFormat2.class));
+                ClassUtil.findContainingJar(filterJar, org.apache.hadoop.hbase.mapreduce.HFileOutputFormat2.class));
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar(org.apache.hadoop.hbase.regionserver.BloomType.class));
+                ClassUtil.findContainingJar(filterJar, org.apache.hadoop.hbase.regionserver.BloomType.class));
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar(org.apache.hadoop.hbase.protobuf.generated.HFileProtos.class)); //hbase-protocal.jar
+                ClassUtil.findContainingJar(filterJar, org.apache.hadoop.hbase.protobuf.generated.HFileProtos.class)); //hbase-protocal.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar(org.apache.hadoop.hbase.CompatibilityFactory.class)); //hbase-hadoop-compact.jar
-        StringUtil.appendWithSeparator(jars, ClassUtil.findContainingJar("org.htrace.HTraceConfiguration", null)); // htrace-core.jar
-        StringUtil.appendWithSeparator(jars, ClassUtil.findContainingJar("org.apache.htrace.Trace", null)); // htrace-core.jar
+                ClassUtil.findContainingJar(filterJar, org.apache.hadoop.hbase.CompatibilityFactory.class)); //hbase-hadoop-compact.jar
+        StringUtil.appendWithSeparator(jars, ClassUtil.findContainingJar(filterJar, "org.htrace.HTraceConfiguration", null)); // htrace-core.jar
+        StringUtil.appendWithSeparator(jars, ClassUtil.findContainingJar(filterJar, "org.apache.htrace.Trace", null)); // htrace-core.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("com.yammer.metrics.core.MetricsRegistry", null)); // metrics-core.jar
+                ClassUtil.findContainingJar(filterJar, "com.yammer.metrics.core.MetricsRegistry", null)); // metrics-core.jar
         //KYLIN-3607
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hadoop.hbase.regionserver.MetricsRegionServerSourceFactory", null));//hbase-hadoop-compat-1.1.1.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hadoop.hbase.regionserver.MetricsRegionServerSourceFactory", null));//hbase-hadoop-compat-1.1.1.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hadoop.hbase.regionserver.MetricsRegionServerSourceFactoryImpl", null));//hbase-hadoop2-compat-1.1.1.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hadoop.hbase.regionserver.MetricsRegionServerSourceFactoryImpl", null));//hbase-hadoop2-compat-1.1.1.jar
 
         //KYLIN-3537
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hadoop.hbase.io.hfile.HFileWriterImpl", null));//hbase-server.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hadoop.hbase.io.hfile.HFileWriterImpl", null));//hbase-server.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hbase.thirdparty.com.google.common.cache.CacheLoader", null));//hbase-shaded-miscellaneous.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hbase.thirdparty.com.google.common.cache.CacheLoader", null));//hbase-shaded-miscellaneous.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hadoop.hbase.metrics.MetricRegistry", null));//hbase-metrics-api.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hadoop.hbase.metrics.MetricRegistry", null));//hbase-metrics-api.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hadoop.hbase.metrics.impl.MetricRegistriesImpl", null));//hbase-metrics.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hadoop.hbase.metrics.impl.MetricRegistriesImpl", null));//hbase-metrics.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hbase.thirdparty.com.google.protobuf.Message", null));//hbase-shaded-protobuf.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hbase.thirdparty.com.google.protobuf.Message", null));//hbase-shaded-protobuf.jar
         StringUtil.appendWithSeparator(jars,
-                ClassUtil.findContainingJar("org.apache.hadoop.hbase.shaded.protobuf.generated.HFileProtos", null));//hbase-protocol-shaded.jar
+                ClassUtil.findContainingJar(filterJar, "org.apache.hadoop.hbase.shaded.protobuf.generated.HFileProtos", null));//hbase-protocol-shaded.jar
 
         if (!StringUtil.isEmpty(seg.getConfig().getFlinkAdditionalJars())) {
             StringUtil.appendWithSeparator(jars, seg.getConfig().getFlinkAdditionalJars());

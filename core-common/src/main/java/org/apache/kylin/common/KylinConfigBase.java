@@ -1666,6 +1666,10 @@ public abstract class KylinConfigBase implements Serializable {
         return getOptional("kylin.engine.spark.additional-jars", "");
     }
 
+    public String getSparkConvertCuboidDataJarsFilter() {
+        return getOptional("kylin.engine.spark-convert-cuboid-data.jars.filter", "");
+    }
+
     public String getFlinkAdditionalJars() {
         return getOptional("kylin.engine.flink.additional-jars", "");
     }

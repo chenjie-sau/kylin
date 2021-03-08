@@ -243,6 +243,7 @@ public class SparkBuildDictionary extends AbstractApplication implements Seriali
         private void init() {
             try (KylinConfig.SetAndUnsetThreadLocalConfig autoUnset = KylinConfig
                     .setAndUnsetThreadLocalConfig(config)) {
+                logger.info("==========init config {}", config);
                 cubeSegment = CubeManager.getInstance(config).getCube(cubeName).getSegmentById(segmentId);
                 dictManager = DictionaryManager.getInstance(config);
             }

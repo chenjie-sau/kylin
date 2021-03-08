@@ -458,7 +458,7 @@ public class KylinConfig extends KylinConfigBase {
         KylinConfig base = base();
         if (base != this)
             return base.getManager(clz);
-
+        logger.info("==========KylinConfig config managersCache{}, Class{}", managersCache, clz);
         Object mgr = managersCache.get(clz);
         if (mgr != null)
             return (T) mgr;

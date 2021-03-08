@@ -95,6 +95,16 @@ public class ClassUtil {
         return findContainingJar(clazz, null);
     }
 
+    public static String findContainingJar(String[] filters, Class<?> clazz) {
+        String jarStr = findContainingJar(clazz, null);
+        for (String filter: filters) {
+            if (null == jarStr || jarStr.contains(filter)){
+                return "";
+            }
+        }
+        return jarStr;
+    }
+
     /**
      * Load the first jar library contains clazz with preferJarKeyword matched. If preferJarKeyword is null, just load the
      * jar likes Hadoop Commons' ClassUtil
@@ -147,5 +157,22 @@ public class ClassUtil {
         }
 
         return "";
+    }
+
+    public static String findContainingJar(String[] filters, String className, String perferLibraryName) {
+        String jarStr = "";
+        try {
+            jarStr = findContainingJar(Class.forName(className), perferLibraryName);
+        } catch (ClassNotFoundException e) {
+            logger.warn("failed to locate jar for class " + className + ", ignore it");
+        }
+
+        for (String filter: filters) {
+            if (null == jarStr || jarStr.contains(filter)){
+                return "";
+            }
+        }
+
+       return jarStr;
     }
 }

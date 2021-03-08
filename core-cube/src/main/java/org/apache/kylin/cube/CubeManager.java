@@ -103,6 +103,7 @@ public class CubeManager implements IRealizationProvider {
     private static final Logger logger = LoggerFactory.getLogger(CubeManager.class);
 
     public static CubeManager getInstance(KylinConfig config) {
+        logger.info("==========CubeManager config {}", config);
         return config.getManager(CubeManager.class);
     }
 
